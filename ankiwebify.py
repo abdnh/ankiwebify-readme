@@ -39,6 +39,12 @@ def ankiwebify(filename: str, github_repo: str, branch: str = "master"):
         tag.name = "b"
         tag.insert_before("\n")
 
+    for tag in doc("em"):
+        tag.name = "i"
+
+    for tag in doc("strong"):
+        tag.name = "b"
+
     if github_repo:
         for tag in doc(re.compile("(img)|(video)")):
             src = tag["src"]
