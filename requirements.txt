@@ -1,2 +1,3 @@
 Markdown
 beautifulsoup4
+setuptools
