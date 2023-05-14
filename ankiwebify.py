@@ -7,7 +7,7 @@ allowed_tags = ["img", "a", "b", "i", "code", "ul", "ol", "li", "div"]
 
 
 def is_relative_link(url: str) -> bool:
-    return not (url.startswith("http://") or url.startswith("https://"))
+    return not (url.startswith("http://") or url.startswith("https://") or url.startswith("mailto:"))
 
 
 def ankiwebify(filename: str, github_repo: str, branch: str = "master"):
