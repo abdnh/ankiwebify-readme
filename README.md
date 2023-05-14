@@ -21,3 +21,7 @@ optional arguments:
   --github NAME    GitHub repo name to convert relative links according to
   --branch BRANCH  GitHub repo branch to use for relative links
 ```
+
+## Related
+
+I also published another implementation of this as an extension for VS Code. You might want to check that too since it's probably easier to use if you're a VS Code user: https://github.com/abdnh/vscode-ankiwebify
