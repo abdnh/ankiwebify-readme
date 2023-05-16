@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from pathlib import Path
 import re
 
 from markdown import markdown
@@ -9,8 +12,13 @@ allowed_tags = ["img", "a", "b", "i", "code", "ul", "ol", "li", "div"]
 def is_relative_link(url: str) -> bool:
     return not (url.startswith("http://") or url.startswith("https://") or url.startswith("mailto:"))
 
+def normalize_relative_link(root_dir: Path, src: Path | str) -> str:
+    "Remove things like . from a relative path and convert to POSIX format"
+    return str((root_dir / src).resolve().relative_to(root_dir).as_posix())
+
 
 def ankiwebify(filename: str, github_repo: str, branch: str = "master"):
+    src_dir = Path(filename).parent.resolve()
     with open(filename, "r", encoding="utf-8") as f:
         html = markdown(f.read(), output_format="html")
     doc = BeautifulSoup(html, "html.parser")
@@ -49,12 +57,14 @@ def ankiwebify(filename: str, github_repo: str, branch: str = "master"):
         for tag in doc(re.compile("(img)|(video)")):
             src = tag["src"]
             if is_relative_link(src):
+                src = normalize_relative_link(src_dir, src)
                 tag[
                     "src"
                 ] = f"https://raw.githubusercontent.com/{github_repo}/{branch}/{src}"
         for tag in doc("a"):
             href = tag["href"]
             if is_relative_link(href):
+                href = normalize_relative_link(src_dir, href)
                 tag["href"] = f"https://github.com/{github_repo}/blob/{branch}/{href}"
 
     for tag in doc():
